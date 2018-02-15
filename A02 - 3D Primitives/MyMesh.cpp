@@ -276,8 +276,16 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	//GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+	//vector3 v3Value = a_v3Dimensions * 0.5f;
+	float fHeight = a_fHeight * 0.5f;
+	float fRadius = a_fRadius * 0.5f;
+
+	for (int i = 0; i < a_nSubdivisions; i++)
+	{
+
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -302,6 +310,7 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	// Replace this with your code
 	GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
