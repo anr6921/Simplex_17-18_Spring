@@ -14,8 +14,12 @@ Date: 2017/05
 
 class Application
 {
+	matrix4 m_m4Cube = IDENTITY_M4; // identity matrix
+
 	MyMesh* m_pMesh = nullptr;
 	MyMesh* m_pMesh1 = nullptr;
+	MyMesh* m_pMesh2 = nullptr;
+	MyMesh* m_pMesh3 = nullptr;
 
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
 private:

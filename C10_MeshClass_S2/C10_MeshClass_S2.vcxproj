@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{40A83E3A-0B83-4640-89C8-5685B9A01734}</ProjectGuid>
+    <ProjectGuid>{AD806EC5-BAD6-4227-9DE9-95EB1C3FAAB9}</ProjectGuid>
     <RootNamespace>C10_MeshClass_S2</RootNamespace>
     <ProjectName>C10_MeshClass_S2</ProjectName>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
