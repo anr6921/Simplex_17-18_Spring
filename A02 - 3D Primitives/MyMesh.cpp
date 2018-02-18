@@ -331,7 +331,6 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-	//GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
 	float pi = 3.14159;
 	vector3 origin = vector3(0, 0, 0);
@@ -399,8 +398,60 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
 	// -------------------------------
+	float pi = 3.14159;
+	vector3 origin = vector3(0, 0, 0);
+	vector3 top = vector3(0, 0, a_fHeight);
+	float a_fRadius = a_fOuterRadius; //set outerRadius to a_fRadius to reuse cylinder code
+
+	for (int i = 0; i < a_nSubdivisions; i++)
+	{
+		//generate first bottom outter vector
+		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s = sin(angle);
+		float c = cos(angle);
+		vector3 side1(c, s, 0.0f);
+		side1 = side1*a_fRadius;
+
+		//generate second bottom outter vector
+		float angle2 = 2 * pi*((float)(i + 1) / (float)a_nSubdivisions);
+		float s2 = sin(angle2);
+		float c2 = cos(angle2);
+		vector3 side2(c2, s2, 0.0f);
+		side2 = side2*a_fRadius;
+
+		//first bottom inner vector
+		//float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s3 = sin(angle);
+		float c3 = cos(angle);
+		vector3 side3(c, s, 0.0f);
+		side3 = side3*a_fInnerRadius;
+
+		//generate second bottom inner vector
+		//float angle2 = 2 * pi*((float)(i + 1) / (float)a_nSubdivisions);
+		float s4 = sin(angle2);
+		float c4 = cos(angle2);
+		vector3 side4(c2, s2, 0.0f);
+		side4 = side4*a_fInnerRadius;
+
+		//bottom 
+		//AddTri(side2, side1, origin);
+		AddQuad(side3, side4, side1, side2);
+
+		//top
+		vector3 top1(c*a_fRadius, s*a_fRadius, a_fHeight);
+		vector3 top2(c2*a_fRadius, s2*a_fRadius, a_fHeight);
+		vector3 top3(c*a_fInnerRadius, s*a_fInnerRadius, a_fHeight);
+		vector3 top4(c2*a_fInnerRadius, s2*a_fInnerRadius, a_fHeight);
+		AddQuad(top1, top2, top3, top4);
+
+		//outter sides
+		AddQuad(top2, top1, side2, side1);
+
+		//inner sides
+		AddQuad(top3, top4, side3, side4);
+
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
