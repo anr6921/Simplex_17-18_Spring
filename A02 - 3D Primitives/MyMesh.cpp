@@ -282,11 +282,48 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	float fHeight = a_fHeight * 0.5f;
 	float fRadius = a_fRadius * 0.5f;
 
-	for (int i = 0; i < a_nSubdivisions; i++)
+	float pi = 3.14159;
+	float x;
+	float y;
+	float z = 0;
+	vector3 origin = vector3(0, 0, 0);
+	vector3 top = vector3(0, 0, -a_fHeight);
+	
+	AddVertexPosition(origin);
+	//AddVertexPosition(top);
+	for(int i = 0; i <= a_nSubdivisions; i++)
 	{
+		//get angle
+		float angle = 2.0f * pi * i /a_nSubdivisions;
+		//float angle2 = 2.0f * pi * i++ / a_nSubdivisions;
 
+		//x = a_fRadius * cos(i) - a_fHeight;
+		//y = a_fRadius * sin(i) + a_fRadius;
+		x = a_fRadius * cosf(angle);
+		y = a_fRadius * sinf(angle);
+
+		//float x2 = a_fRadius * cosf(angle2);
+		//float y2 = a_fRadius * sinf(angle2);
+	
+		vector3 vertex1(x, y, z);
+		//vector3 vertex2(x2,y2,z);
+		top = vector3(0, 0, -a_fHeight);
+
+		vector3 vertex3(x, y, -a_fHeight);
+		//vector3 vertex4(x2, y2, -a_fHeight);
+		
+		//AddTri(vertex1, vertex2, top);
+		//AddVertexPosition(vertex1);
+		//AddVertexPosition(vertex2);
+		//AddVertexPosition(top);
+		AddTri(vertex1, origin, vertex1);
+		//AddTri(vertex3, top, vertex3);
+		
+		
+		//AddTri(vertex3, vertex3, top);
+		
 	}
-
+	
 	// Adding information about color
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
@@ -308,9 +345,24 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	//GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+	float pi = 3.14159;
+	float x;
+	float y;
+	float z = 0;
+	vector3 origin = vector3(0, 0, 0);
+	vector3 top;
 
+	AddVertexPosition(origin);
+	//AddVertexPosition(top);
+	for (int i = 0; i <= a_nSubdivisions; i++)
+	{
+		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s = sin(angle);
+		float c = cos(angle);
+		
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
