@@ -283,8 +283,6 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	vector3 origin = vector3(0, 0, 0);
 	vector3 top = vector3(0,0,a_fHeight);
 
-	AddVertexPosition(origin);
-	//AddVertexPosition(top);
 	for (int i = 0; i <= a_nSubdivisions; ++i)
 	{
 		//generate first tri vector
@@ -339,9 +337,7 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	vector3 origin = vector3(0, 0, 0);
 	vector3 top=vector3(0,0,a_fHeight);
 
-	AddVertexPosition(origin);
-	//AddVertexPosition(top);
-	for (int i = 0; i <= a_nSubdivisions; ++i)
+	for (int i = 0; i < a_nSubdivisions; i++)
 	{
 		//generate first bottom tri vector
 		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
@@ -358,21 +354,21 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 		side2 = side2*a_fRadius;
 
 		//bottom 
-		//AddVertexPosition(side1);
 		//AddVertexPosition(side2);
+		//AddVertexPosition(side1);
 		//AddVertexPosition(origin);
-		AddTri(side1, side2, origin);
+		AddTri(side2, side1, origin);
 
 		//top
-		//side1.z = a_fHeight;
-		//side2.z = a_fHeight;
-		vector3 top1(c, s, a_fHeight);
-		vector3 top2(c2, s2, a_fHeight);
-		//AddVertexPosition(-top);
-		//AddVertexPosition(side1);
-		//AddVertexPosition(side2);
-		//AddTri(top1, top2, -top);
+		vector3 top1(c*a_fRadius, s*a_fRadius, a_fHeight);
+		vector3 top2(c2*a_fRadius, s2*a_fRadius, a_fHeight);
+		//AddVertexPosition(top1);
+		//AddVertexPosition(top2);
+		//AddVertexPosition(top);
+		AddTri(top1, top2, top);
 
+		//sides
+		AddQuad(top2, top1, side2, side1);
 		
 	}
 
