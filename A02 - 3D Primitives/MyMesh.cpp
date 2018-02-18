@@ -279,7 +279,7 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	//GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
 	//vector3 v3Value = a_v3Dimensions * 0.5f;
-	float pi = 3.14159;
+	float pi = 3.14159f;
 	vector3 origin = vector3(0, 0, 0);
 	vector3 top = vector3(0,0,a_fHeight);
 
@@ -332,7 +332,7 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 
 	// Replace this with your code
 	// -------------------------------
-	float pi = 3.14159;
+	float pi = 3.14159f;
 	vector3 origin = vector3(0, 0, 0);
 	vector3 top=vector3(0,0,a_fHeight);
 
@@ -399,7 +399,7 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 
 	// Replace this with your code
 	// -------------------------------
-	float pi = 3.14159;
+	float pi = 3.14159f;
 	vector3 origin = vector3(0, 0, 0);
 	vector3 top = vector3(0, 0, a_fHeight);
 	float a_fRadius = a_fOuterRadius; //set outerRadius to a_fRadius to reuse cylinder code
@@ -509,10 +509,11 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	// Replace this with your code
 	//GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
-	float pi = 3.14159;
+	float pi = 3.14159f;
 	vector3 origin = vector3(0, 0, 0);
 	float a_fHeight = a_fRadius;
-	vector3 top = vector3(0, 0, a_fHeight);
+	vector3 top = vector3(0, 0, a_fHeight); 
+	float radius = a_fRadius / 2;
 
 	for (int i = 0; i <= a_nSubdivisions; ++i)
 	{
@@ -566,49 +567,17 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 		vector3 side2(c2, s2, 0.0f);
 		side2 = side2*a_fRadius;
 
-		//bottom 
-		//AddVertexPosition(side2);
-		//AddVertexPosition(side1);
-		//AddVertexPosition(origin);
-		AddTri(side2, side1, -top);
-
-		//top
-		vector3 top1(c*a_fRadius, s*a_fRadius, a_fHeight);
-		vector3 top2(c2*a_fRadius, s2*a_fRadius, a_fHeight);
-		//AddVertexPosition(top1);
-		//AddVertexPosition(top2);
-		//AddVertexPosition(top);
-		//AddTri(side1, side2, top);
-
-		float radius = a_fRadius / 2;
 		// get vector between side1 and side2
 		vector3 mid1 = (side2 + side1)/2.0f;
-		//vector3 mid1 = (a_fRadius / (mid1*(-1.0f)))*mid1;
-		//mid1.x = mid1.x + mid1.x*radius;
-		//mid1.y = mid1.y + mid1.y*radius;
-		//mid1.z = mid1.z + mid1.z*radius;
 		mid1 = mid1 + mid1*radius;
 		
-		//vector between side1 and -top
+		//vector between side1 and top
 		vector3 mid2 = (top + side1)/2.0f;
 		mid2 = mid2 + mid2*radius;
 		
-		//vec between side2 and -top
+		//vec between side2 and top
 		vector3 mid3 = (top + side2)/2.0f;
 		mid3 = mid3 + mid3*radius;
-		//AddVertexPosition(mid3);
-		//AddVertexPosition(mid2);
-		//AddVertexPosition(mid1);
-
-		/*
-		//bottom center tri
-		AddTri(mid1, mid2, mid3);
-		//bottom top tri
-		AddTri(top, mid2, mid3);
-		//bottom right tri
-		AddTri(mid2, side1, mid1);
-		//bottom left tri
-		AddTri(mid3, mid1, side2);*/
 
 		//top center tri
 		AddTri(mid3, mid2, mid1);
@@ -618,6 +587,23 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 		AddTri(mid3, mid1, side2);
 		//top right tri
 		AddTri(mid2, side1, mid1);
+
+		//vector between side1 and -top
+		vector3 mid4 = (-top + side1) / 2.0f;
+		mid4 = mid4 + mid4*radius;
+
+		//vec between side2 and -top
+		vector3 mid5 = (-top + side2) / 2.0f;
+		mid5 = mid5 + mid5*radius;
+
+		//bottom center tri
+		AddTri(mid1, mid4, mid5);
+		//bottom top tri
+		AddTri(mid5, mid4, -top);
+		//bottom left tri
+		AddTri(side2, mid1, mid5);
+		//bottom right tri
+		AddTri(mid1, side1, mid4);
 		
 	}
 
