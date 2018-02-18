@@ -421,21 +421,18 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 		side2 = side2*a_fRadius;
 
 		//first bottom inner vector
-		//float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
 		float s3 = sin(angle);
 		float c3 = cos(angle);
 		vector3 side3(c, s, 0.0f);
 		side3 = side3*a_fInnerRadius;
 
 		//generate second bottom inner vector
-		//float angle2 = 2 * pi*((float)(i + 1) / (float)a_nSubdivisions);
 		float s4 = sin(angle2);
 		float c4 = cos(angle2);
 		vector3 side4(c2, s2, 0.0f);
 		side4 = side4*a_fInnerRadius;
 
 		//bottom 
-		//AddTri(side2, side1, origin);
 		AddQuad(side3, side4, side1, side2);
 
 		//top
@@ -506,8 +503,6 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Release();
 	Init();
 
-	// Replace this with your code
-	//GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
 	float pi = 3.14159f;
 	vector3 origin = vector3(0, 0, 0);
