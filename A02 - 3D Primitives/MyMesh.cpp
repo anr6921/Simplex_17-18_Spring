@@ -276,9 +276,40 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	//GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+	//vector3 v3Value = a_v3Dimensions * 0.5f;
+	float pi = 3.14159f;
+	vector3 origin = vector3(0, 0, 0);
+	vector3 top = vector3(0,0,a_fHeight);
 
+	for (int i = 0; i <= a_nSubdivisions; ++i)
+	{
+		//generate first tri vector
+		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s = sin(angle);
+		float c = cos(angle);
+		vector3 side1(c, s, 0.0f);
+		side1 = side1*a_fRadius;
+
+		//generate second tri vector
+		float angle2 = 2 * pi*((float)(i + 1) / (float)a_nSubdivisions);
+		float s2 = sin(angle2);
+		float c2 = cos(angle2);
+		vector3 side2(c2, s2, 0.0f);
+		side2 = side2*a_fRadius;
+
+		//bottom
+		AddTri(side2, side1, origin);
+
+		//AddVertexPosition(side2);
+		//AddVertexPosition(side1);
+		//AddVertexPosition(origin);
+
+		//add side tri
+		AddTri(side1, side2, top);
+	}
+	
 	// Adding information about color
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
@@ -300,8 +331,45 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+	float pi = 3.14159f;
+	vector3 origin = vector3(0, 0, 0);
+	vector3 top=vector3(0,0,a_fHeight);
+
+	for (int i = 0; i < a_nSubdivisions; i++)
+	{
+		//generate first bottom tri vector
+		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s = sin(angle);
+		float c = cos(angle);
+		vector3 side1(c, s, 0.0f);
+		side1 = side1*a_fRadius;
+		
+		//generate second bottom tri vector
+		float angle2 = 2 * pi*((float)(i+1) / (float)a_nSubdivisions);
+		float s2 = sin(angle2);
+		float c2 = cos(angle2);
+		vector3 side2(c2, s2, 0.0f);
+		side2 = side2*a_fRadius;
+
+		//bottom 
+		//AddVertexPosition(side2);
+		//AddVertexPosition(side1);
+		//AddVertexPosition(origin);
+		AddTri(side2, side1, origin);
+
+		//top
+		vector3 top1(c*a_fRadius, s*a_fRadius, a_fHeight);
+		vector3 top2(c2*a_fRadius, s2*a_fRadius, a_fHeight);
+		//AddVertexPosition(top1);
+		//AddVertexPosition(top2);
+		//AddVertexPosition(top);
+		AddTri(top1, top2, top);
+
+		//sides
+		AddQuad(top2, top1, side2, side1);
+		
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -330,8 +398,57 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
 	// -------------------------------
+	float pi = 3.14159f;
+	vector3 origin = vector3(0, 0, 0);
+	vector3 top = vector3(0, 0, a_fHeight);
+	float a_fRadius = a_fOuterRadius; //set outerRadius to a_fRadius to reuse cylinder code
+
+	for (int i = 0; i < a_nSubdivisions; i++)
+	{
+		//generate first bottom outter vector
+		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s = sin(angle);
+		float c = cos(angle);
+		vector3 side1(c, s, 0.0f);
+		side1 = side1*a_fRadius;
+
+		//generate second bottom outter vector
+		float angle2 = 2 * pi*((float)(i + 1) / (float)a_nSubdivisions);
+		float s2 = sin(angle2);
+		float c2 = cos(angle2);
+		vector3 side2(c2, s2, 0.0f);
+		side2 = side2*a_fRadius;
+
+		//first bottom inner vector
+		float s3 = sin(angle);
+		float c3 = cos(angle);
+		vector3 side3(c, s, 0.0f);
+		side3 = side3*a_fInnerRadius;
+
+		//generate second bottom inner vector
+		float s4 = sin(angle2);
+		float c4 = cos(angle2);
+		vector3 side4(c2, s2, 0.0f);
+		side4 = side4*a_fInnerRadius;
+
+		//bottom 
+		AddQuad(side3, side4, side1, side2);
+
+		//top
+		vector3 top1(c*a_fRadius, s*a_fRadius, a_fHeight);
+		vector3 top2(c2*a_fRadius, s2*a_fRadius, a_fHeight);
+		vector3 top3(c*a_fInnerRadius, s*a_fInnerRadius, a_fHeight);
+		vector3 top4(c2*a_fInnerRadius, s2*a_fInnerRadius, a_fHeight);
+		AddQuad(top1, top2, top3, top4);
+
+		//outter sides
+		AddQuad(top2, top1, side2, side1);
+
+		//inner sides
+		AddQuad(top3, top4, side3, side4);
+
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -386,9 +503,105 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
 	// -------------------------------
+	float pi = 3.14159f;
+	vector3 origin = vector3(0, 0, 0);
+	float a_fHeight = a_fRadius;
+	vector3 top = vector3(0, 0, a_fHeight); 
+	float radius = a_fRadius / 2;
+
+	for (int i = 0; i <= a_nSubdivisions; ++i)
+	{
+		/* SPHERE
+		//get number of rows
+		float rows = a_fRadius / a_nSubdivisions;
+
+		//generate first bottom tri vector
+		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s = sin(angle);
+		float c = cos(angle);
+		vector3 side1(c, s, 0.0f);
+		side1 = side1*a_fRadius;
+
+		//generate second bottom tri vector
+		float angle2 = 2 * pi*((float)(i + 1) / (float)a_nSubdivisions);
+		float s2 = sin(angle2);
+		float c2 = cos(angle2);
+		vector3 side2(c2, s2, 0.0f);
+		side2 = side2*a_fRadius;
+
+		//bottom 
+		//AddVertexPosition(side2);
+		//AddVertexPosition(side1);
+		//AddVertexPosition(origin);
+		AddTri(side2, side1, origin);
+
+		//top
+		vector3 top1(c*a_fRadius, s*a_fRadius, a_fHeight);
+		vector3 top2(c2*a_fRadius, s2*a_fRadius, a_fHeight);
+		//AddVertexPosition(top1);
+		//AddVertexPosition(top2);
+		//AddVertexPosition(top);
+		AddTri(top1, top2, top);
+
+		//sides
+		AddQuad(top2, top1, side2, side1);*/
+
+		//DODECAHEDRON
+		//generate first bottom tri vector
+		float angle = 2 * pi*((float)i / (float)a_nSubdivisions);
+		float s = sin(angle);
+		float c = cos(angle);
+		vector3 side1(c, s, 0.0f);
+		side1 = side1*a_fRadius;
+
+		//generate second bottom tri vector
+		float angle2 = 2 * pi*((float)(i + 1) / (float)a_nSubdivisions);
+		float s2 = sin(angle2);
+		float c2 = cos(angle2);
+		vector3 side2(c2, s2, 0.0f);
+		side2 = side2*a_fRadius;
+
+		// get vector between side1 and side2
+		vector3 mid1 = (side2 + side1)/2.0f;
+		mid1 = mid1 + mid1*radius;
+		
+		//vector between side1 and top
+		vector3 mid2 = (top + side1)/2.0f;
+		mid2 = mid2 + mid2*radius;
+		
+		//vec between side2 and top
+		vector3 mid3 = (top + side2)/2.0f;
+		mid3 = mid3 + mid3*radius;
+
+		//top center tri
+		AddTri(mid3, mid2, mid1);
+		//top top tri
+		AddTri(top, mid2, mid3);
+		//top left tri
+		AddTri(mid3, mid1, side2);
+		//top right tri
+		AddTri(mid2, side1, mid1);
+
+		//vector between side1 and -top
+		vector3 mid4 = (-top + side1) / 2.0f;
+		mid4 = mid4 + mid4*radius;
+
+		//vec between side2 and -top
+		vector3 mid5 = (-top + side2) / 2.0f;
+		mid5 = mid5 + mid5*radius;
+
+		//bottom center tri
+		AddTri(mid1, mid4, mid5);
+		//bottom top tri
+		AddTri(mid5, mid4, -top);
+		//bottom left tri
+		AddTri(side2, mid1, mid5);
+		//bottom right tri
+		AddTri(mid1, side1, mid4);
+		
+	}
+
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
