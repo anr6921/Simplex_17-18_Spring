@@ -14,6 +14,7 @@ Date: 2017/05
 
 class Application
 {
+	//Matix4 m_m4Model = 
 	MyMesh* m_pMesh = nullptr;
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
 
