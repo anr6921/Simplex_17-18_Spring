@@ -52,19 +52,37 @@ void Application::Display(void)
 	fTimer += m_pSystem->GetDeltaTime(uClock); //get the delta time for that timer
 
 	//calculate the current position
-	vector3 v3CurrentPos;
+	static vector3 v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);;
 	
 
 
 
 
 	//your code goes here
-	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
+	//v3CurrentPos 
 	//-------------------
-	//glm::lerp()
 
+	static float frame = 0.0f; // frame rate --  should be less than 1.0f
+	static int count = 0; // position in m_stopsList 
 
+	if (frame < 1.0f)
+	{
+		v3CurrentPos = glm::lerp(v3CurrentPos, m_stopsList[count], frame);
+		frame += 0.05f;
+	}
+	else {
+		frame = 0.0f;
+		if (count >= m_stopsList.size()-1)
+		{
+			count = 0;
+		}
+		else {
+			count++;
+		}
+	}
 	
+
+
 	matrix4 m4Model = glm::translate(v3CurrentPos);
 	m_pModel->SetModelMatrix(m4Model);
 
