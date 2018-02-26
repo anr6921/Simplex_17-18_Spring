@@ -61,7 +61,7 @@ void Application::Display(void)
 	//your code goes here
 	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
 	//-------------------
-	
+	//glm::lerp()
 
 
 	
