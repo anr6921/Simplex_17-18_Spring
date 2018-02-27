@@ -18,7 +18,8 @@ class Application
 	quaternion m_qOrientation;
 	vector3 m_v3Rotation;
 	MyMesh* m_pMesh = nullptr;
-	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	String m_sProgrammer = "Anna Rosenberg - anr6921@rit.edu";
+	vector3 axisLock; // vector for axis of rotation to prevent gimbal lock
 
 private:
 	static ImGuiObject gui; //GUI object

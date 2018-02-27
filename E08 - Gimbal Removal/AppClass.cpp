@@ -25,12 +25,15 @@ void Application::Display(void)
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
 	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
 
-	
+	/*
 	m_m4Model = glm::rotate(IDENTITY_M4, m_v3Rotation.x, vector3(1.0f, 0.0f, 0.0f));
 	m_m4Model = glm::rotate(m_m4Model, m_v3Rotation.y, vector3(0.0f, 1.0f, 0.0f));
 	m_m4Model = glm::rotate(m_m4Model, m_v3Rotation.z, vector3(0.0f, 0.0f, 1.0f));
-
-	m_qOrientation = m_qOrientation * glm::angleAxis(1.0f, vector3(1.0f));
+	*/
+	m_qOrientation = m_qOrientation * glm::angleAxis(axisLock.x, AXIS_X);
+	m_qOrientation = m_qOrientation * glm::angleAxis(axisLock.y, AXIS_Y);
+	m_qOrientation = m_qOrientation * glm::angleAxis(axisLock.z, AXIS_Z);
+	//m_qOrientation = m_qOrientation * glm::angleAxis(1.0f, vector3(1.0f));
 	
 	m_pMesh->Render(m4Projection, m4View, ToMatrix4(m_qOrientation));
 	
