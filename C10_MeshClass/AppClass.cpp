@@ -3,11 +3,11 @@ void Application::InitVariables(void)
 {
 	//Make MyMesh object
 	m_pMesh = new MyMesh();
-	m_pMesh->GenerateCube(1.0f, C_BROWN);
+	m_pMesh->GenerateCone(1.0f, 1.0f, 7, C_BROWN);
 
 	//Make MyMesh object
 	m_pMesh1 = new MyMesh();
-	m_pMesh1->GenerateCube(1.0f, C_WHITE);
+	m_pMesh1->GenerateCone(0.5f, 0.5f, 7, C_WHITE);
 }
 void Application::Update(void)
 {
@@ -25,11 +25,28 @@ void Application::Display(void)
 	// Clear the screen
 	ClearScreen();
 
+	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
+	float fovy = 45.0f; //field of view, YEAH
+	float ratio = m_pSystem->GetWindowWidth()/static_cast<float>(m_pSystem->GetWindowHeight()); // get ratio of window so shapes aren't distorted. Make sure to static cast height so division returns a float
+	float fNear = 0.01f; // front of eyes forward
+	float fFar = 1000.0f; // plane that cuts off 
+	m4Projection = glm::perspective(fovy, ratio, fNear, fFar);
+	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
+	vector3 v3Position(0,0,15);
+	vector3 v3Target(0,0,14);
+	vector3 v3Up(0,1,0);
+	m4View = glm::lookAt(v3Position, v3Target, v3Up);
+
+	m_pMesh->Render(m4Projection, m4View, ToMatrix4(m_qArcBall));
+	m_pMesh1->Render(m4Projection, m4View, glm::translate(vector3(3.0f, 0.0f, 0.0f)));
+
 	static float fPos = 0.0f;
 
 	m_m4Cube = glm::translate(vector3(fPos, 0.0f, 0.0f));
 
-	m_pMesh->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall)*m_m4Cube);
+	//m_pMesh->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall)*m_m4Cube);
+	/*
+	
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3( 2.0f, 0.0f, 0.0f))*m_m4Cube);
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(2.0f, 1.0f, 0.0f))*m_m4Cube);
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(2.0f, 2.0f, 0.0f))*m_m4Cube);
@@ -75,9 +92,9 @@ void Application::Display(void)
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-8.0f, 1.0f, 0.0f))*m_m4Cube);
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-8.0f, 2.0f, 0.0f))*m_m4Cube);
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-7.0f, 2.0f, 0.0f))*m_m4Cube);
-	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-7.0f, 3.0f, 0.0f))*m_m4Cube);
+	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-7.0f, 3.0f, 0.0f))*m_m4Cube);*/
 
-	fPos += 0.1f;
+	//fPos += 0.1f;
 
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
