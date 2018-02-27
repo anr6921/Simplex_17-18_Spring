@@ -38,6 +38,30 @@ void Application::InitVariables(void)
 		m_shapeList.push_back(m_pMeshMngr->GenerateTorus(fSize, fSize - 0.1f, 3, i, v3Color)); //generate a custom torus and add it to the meshmanager
 		fSize += 0.5f; //increment the size for the next orbit
 		uColor -= static_cast<uint>(decrements); //decrease the wavelength
+
+		// MY CODE
+		// generate vectors for the ball to LERP to
+		float pi = 3.14159f;
+		std::vector<vector3> shape;
+		for (int i = 0; i <= uSides; ++i)
+		{
+			//generate first tri vector
+			float angle = 2 * pi*((float)i / (float)uSides);
+			float s = sin(angle);
+			float c = cos(angle);
+			vector3 side1(c, s, 0.0f);
+			side1 *= fSize;
+
+			shape.push_back(side1);
+			//generate second tri vector
+			/*
+			float angle2 = 2 * pi*((float)(i + 1) / (float)uSides);
+			float s2 = sin(angle2);
+			float c2 = cos(angle2);
+			vector3 side2(c2, s2, 0.0f);
+			side2 *= fSize;*/
+		}
+		path.push_back(shape);
 	}
 }
 void Application::Update(void)
@@ -70,7 +94,34 @@ void Application::Display(void)
 		m_pMeshMngr->AddMeshToRenderList(m_shapeList[i], glm::rotate(m4Offset, 90.0f, AXIS_X));
 
 		//calculate the current position
-		vector3 v3CurrentPos = ZERO_V3;
+		std::vector<vector3> vect = path[i];
+		static vector3 v3CurrentPos = vect[0];
+		static float frame = 0.0f; // frame rate --  should be less than 1.0f
+		static int count = 0; // position in path list-- each individual shape
+
+		for (int i = 0; i < path[count].size(); i++)
+		{
+			if (frame < 1.0f)
+			{
+				std::vector<vector3> placeholderVec = path[count];
+				vector3 innerVec = placeholderVec[i++];
+				v3CurrentPos = glm::lerp(v3CurrentPos, innerVec, frame);
+				frame += 0.01f;
+			}
+			else {
+				frame = 0.0f;
+
+			}
+		}
+		if (count >= path.size() - 1)
+		{
+			count = 0;
+		}
+		else {
+			count++;
+		}
+
+
 		matrix4 m4Model = glm::translate(m4Offset, v3CurrentPos);
 
 		//draw spheres
