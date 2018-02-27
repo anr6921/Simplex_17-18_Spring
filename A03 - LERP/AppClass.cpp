@@ -36,21 +36,20 @@ void Application::InitVariables(void)
 	{
 		vector3 v3Color = WaveLengthToRGB(uColor); //calculate color based on wavelength
 		m_shapeList.push_back(m_pMeshMngr->GenerateTorus(fSize, fSize - 0.1f, 3, i, v3Color)); //generate a custom torus and add it to the meshmanager
-		fSize += 0.5f; //increment the size for the next orbit
-		uColor -= static_cast<uint>(decrements); //decrease the wavelength
+
+
 
 		// MY CODE
 		// generate vectors for the ball to LERP to
-		float pi = 3.14159f;
 		std::vector<vector3> shape;
-		for (int i = 0; i <= uSides; ++i)
+		for (int j = 0; j <= i; j++)
 		{
 			//generate first tri vector
-			float angle = 2 * pi*((float)i / (float)uSides);
+			float angle = (2 *PI)*(j/i);
 			float s = sin(angle);
 			float c = cos(angle);
 			vector3 side1(c, s, 0.0f);
-			side1 *= fSize;
+			side1 = side1 * fSize;
 
 			shape.push_back(side1);
 			//generate second tri vector
@@ -62,6 +61,8 @@ void Application::InitVariables(void)
 			side2 *= fSize;*/
 		}
 		path.push_back(shape);
+		fSize += 0.5f; //increment the size for the next orbit
+		uColor -= static_cast<uint>(decrements); //decrease the wavelength
 	}
 }
 void Application::Update(void)
@@ -86,7 +87,7 @@ void Application::Display(void)
 	/*
 		The following offset will orient the orbits as in the demo, start without it to make your life easier.
 	*/
-	//m4Offset = glm::rotate(IDENTITY_M4, 90.0f, AXIS_Z);
+	m4Offset = glm::rotate(IDENTITY_M4, 90.0f, AXIS_Z);
 
 	// draw a shapes
 	for (uint i = 0; i < m_uOrbits; ++i)
@@ -95,22 +96,31 @@ void Application::Display(void)
 
 		//calculate the current position
 		std::vector<vector3> vect = path[i];
-		static vector3 v3CurrentPos = vect[0];
+		vector3 v3CurrentPos;
 		static float frame = 0.0f; // frame rate --  should be less than 1.0f
 		static int count = 0; // position in path list-- each individual shape
 
-		for (int i = 0; i < path[count].size(); i++)
+		std::vector<vector3> m_start = path[i];
+		vector3 start = m_start[i];
+		std::vector<vector3> m_end = path[i];
+		vector3 end = m_end[i]++; //[(m_end[i]++) % path[i].size()];
+
+		// current position
+		v3CurrentPos = glm::lerp(start, end, frame);
+
+		matrix4 m4Model = glm::translate(m4Offset, v3CurrentPos);
+
+		//draw spheres
+		m_pMeshMngr->AddSphereToRenderList(m4Model * glm::scale(vector3(0.1)), C_WHITE);
+
+		for (int j = 0; j < m_end.size(); j++)
 		{
-			if (frame < 1.0f)
+			if (frame >= 1.0f)
 			{
-				std::vector<vector3> placeholderVec = path[count];
-				vector3 innerVec = placeholderVec[i++];
-				v3CurrentPos = glm::lerp(v3CurrentPos, innerVec, frame);
-				frame += 0.01f;
+				frame = 0.0f;
 			}
 			else {
-				frame = 0.0f;
-
+				frame += 0.2f;
 			}
 		}
 		if (count >= path.size() - 1)
@@ -122,10 +132,6 @@ void Application::Display(void)
 		}
 
 
-		matrix4 m4Model = glm::translate(m4Offset, v3CurrentPos);
-
-		//draw spheres
-		m_pMeshMngr->AddSphereToRenderList(m4Model * glm::scale(vector3(0.1)), C_WHITE);
 	}
 
 	//render list call
