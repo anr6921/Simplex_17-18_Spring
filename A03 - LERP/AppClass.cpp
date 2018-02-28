@@ -38,29 +38,29 @@ void Application::InitVariables(void)
 		m_shapeList.push_back(m_pMeshMngr->GenerateTorus(fSize, fSize - 0.1f, 3, i, v3Color)); //generate a custom torus and add it to the meshmanager
 
 
-
 		// MY CODE
 		// generate vector for each LERP stop
 		std::vector<vector3> shape;
 
+		// loop to create each vector and add to shape vector
 		for (int j = 0; j < i; j++)
 		{
-			//generate first tri vector
+			//calculate angle
 			float angle = (2 *PI)*j/i;
+			//calculate x and y position of vector
 			float x = fSize * cos(angle);
 			float y = fSize * sin(angle);
 
+			// push back vector with x, y, and 0 for z value
 			shape.push_back(vector3(x, y, 0.0f));
-			//generate second tri vector
-			/*
-			float angle2 = 2 * pi*((float)(i + 1) / (float)uSides);
-			float s2 = sin(angle2);
-			float c2 = cos(angle2);
-			vector3 side2(c2, s2, 0.0f);
-			side2 *= fSize;*/
 		}
+
+		// add zero to array keeping track of number of vertices
 		vertices.push_back(0);
+
+		// add shape vector to path vector
 		path.push_back(shape);
+
 		fSize += 0.5f; //increment the size for the next orbit
 		uColor -= static_cast<uint>(decrements); //decrease the wavelength
 	}
@@ -105,9 +105,6 @@ void Application::Display(void)
 		//calculate the current position
 		vector3 v3CurrentPos;
 
-		//static float frame = 0.0f; // frame rate --  should be less than 1.0f
-		//static int count = 0; // position in path list-- each individual shape
-
 		//start point
 		//std::vector<vector3> m_start = path[i];
 		vector3 start = path[i][vertices[i]];
@@ -118,16 +115,11 @@ void Application::Display(void)
 
 		// current position
 		v3CurrentPos = glm::lerp(start, end, frame);
-		//frame += 0.01f;
 
 		matrix4 m4Model = glm::translate(m4Offset, v3CurrentPos);
 
 		//draw spheres
-		m_pMeshMngr->AddSphereToRenderList(m4Model * glm::scale(vector3(0.1)), C_WHITE);
-
-
-		
-
+		m_pMeshMngr->AddSphereToRenderList(m4Model * glm::scale(vector3(0.2)), C_WHITE);
 
 	}
 	// end of path
@@ -135,34 +127,18 @@ void Application::Display(void)
 	{
 		for (uint j = 0; j <vertices.size(); j++)
 		{
+			// increment current vertex being calculated
 			vertices[j]++;
+			
 			if (path[j].size() <= vertices[j])
 			{
-				vertices[j] %= path[j].size();
+				vertices[j] = vertices[j]%path[j].size();
 			}
 
 		}
 		//reset timer
 		timer = m_pSystem->GetDeltaTime(clock);
 	}
-	/*
-	for (int j = 0; j < m_end.size(); j++)
-	{
-	if (frame >= 1.0f)
-	{
-	frame = 0.0f;
-	}
-	else {
-	frame += 0.2f;
-	}
-	}
-	if (count >= m_end.size() - 1)
-	{
-		count = 0;
-	}
-	else {
-		count++;
-	}*/
 
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
