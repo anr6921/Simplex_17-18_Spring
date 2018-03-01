@@ -54,9 +54,11 @@ void Application::Display(void)
 		break;
 	case 2:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUp(AXIS_Z *14.0f, ZERO_V3, AXIS_Y);
 		break;
 	case 3:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUp(AXIS_Z *10.0f, ZERO_V3, AXIS_Y);
 		break;
 	case 4:
 		m_pCamera->ResetCamera();
