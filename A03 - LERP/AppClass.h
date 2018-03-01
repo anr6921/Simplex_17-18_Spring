@@ -20,8 +20,9 @@ class Application
 {
 	uint m_uOrbits = 0; //number of shapes starting at 3 and increasing in sides
 	std::vector<uint> m_shapeList; //shape index for circles
-	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	String m_sProgrammer = "Anna Rosenberg - anr6921@rit.edu";
 	std::vector<std::vector<vector3>> path; //vectors of tarus shapes for lerping
+	std::vector<uint> vertices; // list of vertices in each shape
 
 	
 private:
