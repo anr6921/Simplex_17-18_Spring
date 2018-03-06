@@ -125,7 +125,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 
 	case sf::Keyboard::W:
 		vector3 v3Pos = m_pCamera->GetPosition();
-		m_pCamera->SetPosition(v3Pos + vector3(0.0f, 0.0f, 1.0f)); //positive z value will make camera go backwards
+		m_pCamera->SetPosition(v3Pos + vector3(0.0f, 0.0f, -1.0f)); //positive z value will make camera go backwards
 	}
 
 	//gui
