@@ -8,7 +8,11 @@ vector3 Simplex::MyCamera::GetPosition() { return m_v3Position; }
 
 void Simplex::MyCamera::SetTarget(vector3 a_v3Target) { m_v3Target = a_v3Target; }
 
+vector3 Simplex::MyCamera::GetTarget() { return m_v3Target; }
+
 void Simplex::MyCamera::SetUp(vector3 a_v3Up) { m_v3Up = a_v3Up; }
+
+vector3 Simplex::MyCamera::GetUp() { return m_v3Up; }
 
 void Simplex::MyCamera::SetPerspective(bool a_bPerspective) { m_bPerspective = a_bPerspective; }
 

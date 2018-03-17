@@ -81,6 +81,10 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 void Application::ProcessKeyReleased(sf::Event a_event)
 {
 	static bool bFPSControl = false;
+	
+	vector3 v3Pos = m_pCamera->GetPosition(); // get camera position
+	vector3 v3Target = m_pCamera->GetTarget(); // get camera target vector
+	vector3 v3Up = m_pCamera->GetUp(); // get camera up vector
 
 	switch (a_event.key.code)
 	{
@@ -123,9 +127,35 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 		}
 		break;
 
+	//forward
 	case sf::Keyboard::W:
-		vector3 v3Pos = m_pCamera->GetPosition();
-		m_pCamera->SetPosition(v3Pos + vector3(0.0f, 0.0f, 1.0f)); //positive z value will make camera go backwards
+		//vector3 v3Pos = m_pCamera->GetPosition();
+		m_pCamera->SetPosition(v3Pos + vector3(0.0f, 0.0f, 1.0f)*-1.0f); //positive z value will make camera go backwards
+		m_pCamera->SetTarget(v3Target + vector3(0.0f, 0.0f, 1.0f)*-1.0f);
+		m_pCamera->SetUp(v3Up + vector3(0.0f, 0.0f, 1.0f)*-1.0f);
+		break;
+	//backward
+	case sf::Keyboard::S:
+		//vector3 v3Pos = m_pCamera->GetPosition();
+		m_pCamera->SetPosition(v3Pos + vector3(0.0f, 0.0f, 1.0f)); 
+		m_pCamera->SetTarget(v3Target + vector3(0.0f, 0.0f, 1.0f));
+		m_pCamera->SetUp(v3Up + vector3(0.0f, 0.0f, 1.0f));
+		break;
+	//right
+	case sf::Keyboard::D:
+	//	vector3 v3Pos = m_pCamera->GetPosition();
+		m_pCamera->SetPosition(v3Pos + vector3(1.0f, 0.0f, 0.0f)); 
+		m_pCamera->SetTarget(v3Target + vector3(1.0f, 0.0f, 0.0f));
+	
+		//m_pCamera->SetUp(v3Up + vector3(1.0f, 0.0f, 0.0f));
+		break;
+	//left
+	case sf::Keyboard::A:
+		//vector3 v3Pos = m_pCamera->GetPosition();
+		m_pCamera->SetPosition(v3Pos + vector3(1.0f, 0.0f, 0.0f)*-1.0f);
+		m_pCamera->SetTarget(v3Target + vector3(1.0f, 0.0f, 0.0f)*-1.0f);
+		//m_pCamera->SetUp(v3Up + vector3(1.0f, 0.0f, 0.0f)*-1.0f);
+		break;
 	}
 
 	//gui
