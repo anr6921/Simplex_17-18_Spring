@@ -46,8 +46,11 @@ void Application::Update(void)
 	m_pSteve->SetModelMatrix(mSteve);
 	m_pSteveRB->SetModelMatrix(mSteve);
 	
+
+	bool bColliding = m_pModelRB->IsColliding(m_pSteveRB);
 	//check collision, if they are colliding render it in red
-	if (m_pModelRB->IsColliding(m_pSteveRB))
+	//if (m_pModelRB->IsColliding(m_pSteveRB))
+	if (bColliding)
 	{
 		m_pModelRB->SetColor(C_RED);
 		m_pSteveRB->SetColor(C_RED);

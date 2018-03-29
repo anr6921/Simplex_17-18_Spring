@@ -143,5 +143,31 @@ void MyRigidBody::AddToRenderList(void)
 }
 bool MyRigidBody::IsColliding(MyRigidBody* const other)
 {
-	return (glm::distance(GetCenterGlobal(), other->GetCenterGlobal()) < m_fRadius + other->m_fRadius);
+	bool bColliding = false;
+
+	//AABB
+	bColliding = true;
+	m_v3MaxG = vector3(m_m4ToWorld * vector4(m_v3MaxL, 1.0f));
+	m_v3MinG = vector3(m_m4ToWorld * vector4(m_v3MinL, 1.0f));
+
+	vector3 m_v3OtherMaxG = vector3(m_m4ToWorld * vector4(m_v3MaxL, 1.0f));
+	vector3 m_v3OtherMinG = vector3(m_m4ToWorld * vector4(m_v3MinL, 1.0f));
+
+	if (m_v3MinG.x > m_v3OtherMaxG.x) bColliding = false;
+	else if (m_v3MaxG.x < m_v3OtherMinG.x) bColliding = false;
+
+	if (m_v3MinG.y > m_v3OtherMaxG.y) bColliding = false;
+	else if (m_v3MaxG.y < m_v3OtherMinG.y) bColliding = false;
+
+	if (m_v3MinG.z > m_v3OtherMaxG.z) bColliding = false;
+	else if (m_v3MaxG.z < m_v3OtherMinG.z) bColliding = false;
+
+	//bounding sphere
+	/*
+	vector3 v3CenterG = vector3(m_m4ToWorld * vector4(m_v3Center, 1.0f));
+	vector3 v3OtherCenterG= vector3(other->m_m4ToWorld * vector4(other->m_v3Center, 1.0f));
+	if ((this->m_fRadius + other->m_fRadius) < glm::distance(v3CenterG, v3CenterG))
+		bColliding = true;*/
+	//return (glm::distance(GetCenterGlobal(), other->GetCenterGlobal()) < m_fRadius + other->m_fRadius);
+	return bColliding;
 }
