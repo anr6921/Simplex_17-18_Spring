@@ -286,6 +286,33 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	Simplex that might help you [eSATResults] feel free to use it.
 	(eSATResults::SAT_NONE has a value of 0)
 	*/
+	
+	float radius; // this object radius
+	float otherRadius; // other object radius
+
+	vector3 axes[3]; // list of object axes x, y, z
+	vector3 otherAxes[3]; // list of other object axes x, y, z
+
+	vector4 tempAxes[3]; // temp list of axes to convert into world space
+	vector4 tempOtherAxes[3]; // temp list of other axes to convert into world space
+
+	// convert this axis to world space
+	tempAxes[0] = GetModelMatrix() * vector4(1, 0, 0, 0);
+	tempAxes[1] = GetModelMatrix() * vector4(0, 1, 0, 0);
+	tempAxes[2] = GetModelMatrix() * vector4(0, 0, 1, 0);
+	// convert other axis to world space
+	tempOtherAxes[0] = a_pOther->GetModelMatrix() * vector4(1, 0, 0, 0);
+	tempOtherAxes[1] = a_pOther->GetModelMatrix() * vector4(0, 1, 0, 0);
+	tempOtherAxes[2] = a_pOther->GetModelMatrix() * vector4(0, 0, 1, 0);
+	
+	// populate axes with tempAxes values, cast to vector3s
+	axes[0] = vector3(tempAxes[0]);
+	axes[1] = vector3(tempAxes[1]);
+	axes[2] = vector3(tempAxes[2]);
+	// populate otherAxes with tempOtherAxes values, cast to vector3s
+	otherAxes[0] = vector3(tempOtherAxes[0]);
+	otherAxes[1] = vector3(tempOtherAxes[1]);
+	otherAxes[2] = vector3(tempOtherAxes[2]);
 
 	//there is no axis test that separates this two objects
 	return eSATResults::SAT_NONE;
