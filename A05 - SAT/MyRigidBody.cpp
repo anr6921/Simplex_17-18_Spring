@@ -314,6 +314,68 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	otherAxes[1] = vector3(tempOtherAxes[1]);
 	otherAxes[2] = vector3(tempOtherAxes[2]);
 
+	// rotation matrices
+	matrix3 matrix; // this object matrix
+	matrix3 otherMatrix; // other object matrix
+	// calculate rotation matrix expressing other rb in this rb's coordinate frame
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			// initialize this matrix with dot product of this axis and other axis
+			matrix[i][j] = glm::dot(axes[i], otherAxes[j]);
+		}
+	}
+
+	// get translation vector
+	vector3 translationVec = a_pOther->GetCenterGlobal() - GetCenterGlobal();
+	//bring translation into this rb's coordinate frame
+	translationVec = vector3(glm::dot(translationVec, axes[0]), glm::dot(translationVec, axes[1]), glm::dot(translationVec, axes[2]));
+
+	// compute common subexpressions 
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			otherMatrix[i][j] = glm::abs(matrix[i][j]) + 0.0001; //epsilon???
+		}
+	}
+
+	// calculate projected radii on |T.L|
+	vector3 ra = GetHalfWidth(); // radius of this object 
+	vector3 rb = a_pOther->GetHalfWidth(); // radius of other object
+
+	// Tests 1, 2, 3
+	for (int i = 0; i < 3; i++)
+	{
+		radius = ra[i];
+		otherRadius = rb[0] * otherMatrix[1][0]
+			+ rb[1] * otherMatrix[i][1]
+			+ rb[2] * otherMatrix[i][2];
+		if (glm::abs(translationVec[i]) > radius + otherRadius) return 1; // 
+	}
+
+	// Tests 4, 5, 6
+	for (int i = 0; i < 3; i++)
+	{
+		radius = ra[0] * otherMatrix[0][1]
+			+ ra[1] * otherMatrix[1][i]
+			+ ra[2] * otherMatrix[2][i];
+		otherRadius = rb[i];
+		if (glm::abs(translationVec[0] * matrix[0][i]
+			+ translationVec[1] * matrix[1][i]
+			+ translationVec[2] * matrix[2][i]) > radius + otherRadius) return 1;
+	}
+
+	// Test 7
+	radius = ra[1] * otherMatrix[2][0] + ra[2] * otherMatrix[1][0];
+	otherRadius = rb[1] * otherMatrix[0][2] + rb[2] * otherMatrix[0][1];
+	if (glm::abs(translationVec[2] * matrix[1][0] - translationVec[1] * matrix[2][0]) > radius + otherRadius) return 1;
+
+	//
+
+
+
 	//there is no axis test that separates this two objects
 	return eSATResults::SAT_NONE;
 }
