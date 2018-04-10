@@ -368,11 +368,88 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	}
 
 	// Test 7
-	radius = ra[1] * otherMatrix[2][0] + ra[2] * otherMatrix[1][0];
-	otherRadius = rb[1] * otherMatrix[0][2] + rb[2] * otherMatrix[0][1];
-	if (glm::abs(translationVec[2] * matrix[1][0] - translationVec[1] * matrix[2][0]) > radius + otherRadius) return 1;
+	radius = ra[1] * otherMatrix[2][0] 
+		+ ra[2] * otherMatrix[1][0];
+	otherRadius = rb[1] * otherMatrix[0][2] 
+		+ rb[2] * otherMatrix[0][1];
+	if (glm::abs(translationVec[2] * matrix[1][0] 
+		- translationVec[1] * matrix[2][0]) > radius + otherRadius) return 1;
 
-	//
+	// Test 8
+	radius = ra[1] * otherMatrix[2][1]
+		+ ra[2] * otherMatrix[1][1];
+	otherRadius = rb[0] * otherMatrix[0][2]
+		+ rb[2] * otherMatrix[0][0];
+	if (glm::abs(translationVec[2] * matrix[1][1]
+		- translationVec[1] * matrix[2][1]) > radius + otherRadius) return 1;
+
+	// Test 9
+	radius = ra[1] * otherMatrix[2][2]
+		+ ra[2] * otherMatrix[1][2];
+	otherRadius = rb[0] * otherMatrix[0][1]
+		+ rb[1] * otherMatrix[0][0];
+	if (glm::abs(translationVec[2] * matrix[1][2]
+		- translationVec[1] * matrix[2][2]) > radius + otherRadius) return 1;
+
+	// Test 7, 8, 9
+	/*
+	for (int i = 0; i < 3; i++)
+	{
+		radius = ra[1] * otherMatrix[2][i] 
+			+ ra[2] * otherMatrix[1][i];
+		otherRadius = rb[1] * otherMatrix[0][2] 
+			+ rb[2] * otherMatrix[0][1];
+		if (glm::abs(translationVec[2] * matrix[1][i]
+			- translationVec[1] * matrix[2][i]) > radius + otherRadius) return 1;
+	}*/
+
+	// Test 10
+	radius = ra[0] * otherMatrix[2][0]
+		+ ra[2] * otherMatrix[0][0];
+	otherRadius = rb[1] * otherMatrix[1][2]
+		+ rb[2] * otherMatrix[1][1];
+	if (glm::abs(translationVec[0] * matrix[2][0]
+		- translationVec[2] * matrix[0][0]) > radius + otherRadius) return 1;
+
+	// Test 11
+	radius = ra[0] * otherMatrix[2][1]
+		+ ra[2] * otherMatrix[0][1];
+	otherRadius = rb[0] * otherMatrix[1][2]
+		+ rb[2] * otherMatrix[1][0];
+	if (glm::abs(translationVec[0] * matrix[2][1]
+		- translationVec[2] * matrix[0][1]) > radius + otherRadius) return 1;
+
+	// Test 12
+	radius = ra[0] * otherMatrix[2][2]
+		+ ra[2] * otherMatrix[0][2];
+	otherRadius = rb[0] * otherMatrix[1][1]
+		+ rb[1] * otherMatrix[1][0];
+	if (glm::abs(translationVec[0] * matrix[2][2]
+		- translationVec[2] * matrix[0][2]) > radius + otherRadius) return 1;
+
+	// Test 13
+	radius = ra[0] * otherMatrix[1][0]
+		+ ra[1] * otherMatrix[0][0];
+	otherRadius = rb[1] * otherMatrix[2][2]
+		+ rb[2] * otherMatrix[2][1];
+	if (glm::abs(translationVec[1] * matrix[0][0]
+		- translationVec[0] * matrix[1][0]) > radius + otherRadius) return 1;
+
+	// Test 14
+	radius = ra[0] * otherMatrix[1][1]
+		+ ra[1] * otherMatrix[0][1];
+	otherRadius = rb[0] * otherMatrix[2][2]
+		+ rb[2] * otherMatrix[2][1];
+	if (glm::abs(translationVec[1] * matrix[0][1]
+		- translationVec[0] * matrix[1][1]) > radius + otherRadius) return 1;
+
+	// Test 15
+	radius = ra[0] * otherMatrix[1][2]
+		+ ra[1] * otherMatrix[0][2];
+	otherRadius = rb[0] * otherMatrix[2][1]
+		+ rb[1] * otherMatrix[2][0];
+	if (glm::abs(translationVec[1] * matrix[0][2]
+		- translationVec[0] * matrix[1][2]) > radius + otherRadius) return 1;
 
 
 
