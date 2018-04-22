@@ -44,8 +44,8 @@ void Application::Display(void)
 
 	m_m4Cube = glm::translate(vector3(fPos, 0.0f, 0.0f));
 
-	//m_pMesh->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall)*m_m4Cube);
-	/*
+	m_pMesh->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall)*m_m4Cube);
+	
 	
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3( 2.0f, 0.0f, 0.0f))*m_m4Cube);
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(2.0f, 1.0f, 0.0f))*m_m4Cube);
@@ -92,9 +92,9 @@ void Application::Display(void)
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-8.0f, 1.0f, 0.0f))*m_m4Cube);
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-8.0f, 2.0f, 0.0f))*m_m4Cube);
 	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-7.0f, 2.0f, 0.0f))*m_m4Cube);
-	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-7.0f, 3.0f, 0.0f))*m_m4Cube);*/
+	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3(-7.0f, 3.0f, 0.0f))*m_m4Cube);
 
-	//fPos += 0.1f;
+	fPos += 0.1f;
 
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
